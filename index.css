@@ -1,0 +1,141 @@
+/* || General Styles */
+
+body {
+  background-color: #073b4c;
+  font-family: "Quicksand", sans-serif;
+}
+
+header {
+  margin: 3rem auto 1rem;
+}
+
+/* || Header */
+
+h1 {
+  font-family: "Molle", cursive;
+  font-size: 3rem;
+  color: #ffffff;
+  letter-spacing: 4px;
+  text-align: center;
+  margin: 0;
+}
+
+nav {
+  text-align: center;
+  margin: 2rem auto;
+}
+
+.play-with-button {
+  border: 0;
+  border-radius: 10px;
+  background-color: #ffd166;
+  cursor: pointer;
+  font-family: "Quicksand", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  padding: 1rem;
+  margin: 1rem;
+  width: 225px;
+  transition: all 0.3s ease-in-out;
+}
+
+.play-with-button:hover {
+  filter: brightness(85%);
+}
+
+/* || Player Boxes */
+
+.player-box-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.player-box {
+  background: #ffd166;
+  border: 5px solid #ffd166;
+  border-radius: 10px;
+  font-size: 1.25rem;
+  letter-spacing: 2px;
+  width: 150px;
+  height: 125px;
+  padding: 1rem;
+  margin: 1.5rem;
+}
+
+.player-box:first-child {
+  border: 5px solid #ef476f;
+}
+
+.player-box > p {
+  margin: 0 auto 0.5rem;
+}
+
+.player-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.player-symbol {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.player-symbol > button {
+  background-color: #ffffff;
+  border: 1px solid #fff;
+  border-radius: 10px;
+  font-size: 2.5rem;
+  width: 3rem;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.player-symbol > button:hover {
+  filter: brightness(80%);
+}
+
+.player-turn {
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+/* || Game Board */
+
+main {
+  display: flex;
+  justify-content: center;
+  margin: 4rem;
+}
+
+#game-board {
+  display: grid;
+  grid-template-columns: repeat(3, 150px);
+  grid-template-rows: repeat(3, 150px);
+  color: #ffffff;
+  font-size: 6rem;
+  font-weight: 700;
+}
+
+.game-board-grid {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  width: 150px;
+  height: 150px;
+  cursor: pointer;
+}
+
+.game-board-grid:nth-child(-n + 6) {
+  border-bottom: 1px solid #ffffff;
+}
+
+.game-board-grid:nth-child(3n + 1) {
+  border-right: 1px solid #ffffff;
+}
+
+.game-board-grid:nth-child(3n + 2) {
+  border-right: 1px solid #ffffff;
+}
