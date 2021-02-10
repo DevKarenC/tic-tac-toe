@@ -22,12 +22,12 @@
       <h1>Tic Tac Toe</h1>
     </header>
     <nav>
-      <button class="play-with-button">Play with Buddy</button>
-      <button class="play-with-button">Play with Computer</button>
+      <button class="play-with-button buddy">Play with Buddy</button>
+      <button class="play-with-button computer">Play with Computer</button>
       <div class="player-box-wrapper">
         <div class="player-box">
           <p>Player 1</p>
-          <p class="player-name">Karen</p>
+          <p class="player-name">Me</p>
           <div class="player-symbol">
             <button class="o-button">O</button>
             <button class="x-button">X</button>
@@ -35,7 +35,7 @@
         </div>
         <div class="player-box">
           <p>Player 2</p>
-          <p class="player-name">Alan</p>
+          <p class="player-name">You</p>
           <div class="player-symbol">
             <button class="o-button">O</button>
             <button class="x-button">X</button>
@@ -46,15 +46,15 @@
     </nav>
     <main>
       <div id="game-board">
-        <div class="game-board-grid"></div>
-        <div class="game-board-grid"></div>
-        <div class="game-board-grid"></div>
-        <div class="game-board-grid"></div>
-        <div class="game-board-grid"></div>
-        <div class="game-board-grid"></div>
-        <div class="game-board-grid"></div>
-        <div class="game-board-grid"></div>
-        <div class="game-board-grid"></div>
+        <div class="game-board-grid" data-grid-num="0"></div>
+        <div class="game-board-grid" data-grid-num="1"></div>
+        <div class="game-board-grid" data-grid-num="2"></div>
+        <div class="game-board-grid" data-grid-num="3"></div>
+        <div class="game-board-grid" data-grid-num="4"></div>
+        <div class="game-board-grid" data-grid-num="5"></div>
+        <div class="game-board-grid" data-grid-num="6"></div>
+        <div class="game-board-grid" data-grid-num="7"></div>
+        <div class="game-board-grid" data-grid-num="8"></div>
       </div>
     </main>
     <script src="index.js" async defer></script>
