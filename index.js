@@ -4,6 +4,7 @@
 // Gameboard module created as an IIFE
 const Gameboard = (function () {
   const gameboard = ["", "", "", "", "", "", "", "", ""];
+  //   const gameboard = ["O", "X", "O", "", "", "", "", "", ""];
   const getGameboard = () => gameboard;
   const checkGameboard = (gridNum, symbol) => {
     if (gameboard[gridNum] === "") {
@@ -32,7 +33,28 @@ const playerOne = Player("Me", "O");
 const playerTwo = Player("You", "X");
 
 // Game module created as an IIFE
-// const Game = (function () {})();
+const Game = (function () {
+  const getSymbolCount = (symbol) => {
+    return Gameboard.getGameboard().reduce(function (acc, cur) {
+      if (cur === symbol) {
+        return acc + 1;
+      }
+      return acc;
+    }, 0);
+  };
+
+  const getCurrentPlayer = () => {
+    if (playerOne.getSymbol() === "O") {
+      return getSymbolCount("O") > getSymbolCount("X") ? playerTwo : playerOne;
+    } else {
+      return getSymbolCount("X") > getSymbolCount("O") ? playerTwo : playerOne;
+    }
+  };
+  const currentPlayerName = getCurrentPlayer().getName();
+  const currentPlayerSymbol = getCurrentPlayer().getSymbol();
+
+  return { currentPlayerName, currentPlayerSymbol };
+})();
 
 // ControlDisplay module created as an IIFE
 const ControlDisplay = (function () {
