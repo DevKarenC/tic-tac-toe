@@ -24,28 +24,31 @@
     <nav>
       <button class="play-with-button buddy">Play with Buddy</button>
       <button class="play-with-button computer">Play with Computer</button>
-      <div class="player-box-wrapper">
+      <button class="hidden start-button">START</button>
+      <div class="hidden player-box-wrapper">
         <div class="player-box one">
-          <p>Player 1</p>
-          <p class="player-name">Me</p>
+          <p class="player-name">
+            <label for="player-one-name">Player 1</label>
+            <input type="text" id="player-one-name" required />
+          </p>
           <div class="player-symbol">
-            <button class="o-button">O</button>
-            <button class="x-button">X</button>
+            <p>O</p>
           </div>
         </div>
         <div class="player-box two">
-          <p>Player 2</p>
-          <p class="player-name">You</p>
+          <p class="player-name">
+            <label for="player-two-name">Player 2</label>
+            <input type="text" id="player-two-name" required />
+          </p>
           <div class="player-symbol">
-            <button class="o-button">O</button>
-            <button class="x-button">X</button>
+            <p>X</p>
           </div>
         </div>
       </div>
-      <p class="player-turn">Karen's Turn!</p>
+      <p class="hidden player-turn">Karen's Turn!</p>
     </nav>
     <main>
-      <div id="game-board">
+      <div id="game-board" class="hidden">
         <div class="game-board-grid" data-grid-num="0"></div>
         <div class="game-board-grid" data-grid-num="1"></div>
         <div class="game-board-grid" data-grid-num="2"></div>

@@ -25,7 +25,8 @@ nav {
   margin: 2rem auto;
 }
 
-.play-with-button {
+.play-with-button,
+.start-button {
   border: 0;
   border-radius: 10px;
   background-color: #ffd166;
@@ -37,12 +38,50 @@ nav {
   padding: 1rem;
   margin: 1rem;
   width: 225px;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.4s ease-in;
 }
 
 .play-with-button:hover {
-  filter: brightness(85%);
+  background-color: white;
 }
+
+.start-button {
+  font-size: 1.25rem;
+  letter-spacing: 2px;
+  position: relative;
+  transition: ease-out 0.3s;
+  z-index: 1;
+}
+
+.start-button:before {
+  background-color: #ffffff;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  right: 50%;
+  bottom: 0;
+  opacity: 0;
+  transition: 0.5s all ease;
+}
+
+.start-button:hover:before {
+  border-radius: 10px;
+  transition: 0.5s all ease;
+  left: 0;
+  right: 0;
+  opacity: 1;
+  z-index: -1;
+}
+
+/* .visible {
+  transform: scale(1);
+}
+
+.hidden {
+  transform: scale(0);
+  display: none;
+} */
 
 /* || Player Boxes */
 
@@ -67,13 +106,30 @@ nav {
   border: 5px solid #ef476f;
 }
 
-.player-box > p {
-  margin: 0 auto 0.5rem;
+.player-box > label {
+  font-size: 1.25rem;
 }
 
-.player-name {
-  font-size: 1.5rem;
+.player-box > p {
+  margin: 0 auto;
+  min-height: 30px;
+  overflow-wrap: break-word;
+}
+
+#player-one-name,
+#player-two-name {
+  font-family: "Quicksand", sans-serif;
+  font-size: 1.25rem;
   font-weight: 600;
+  margin: 12px auto;
+  width: 125px;
+}
+
+input[type="text"] {
+  border: 0;
+  border-bottom: 1px solid black;
+  background-color: transparent;
+  text-align: center;
 }
 
 .player-symbol {
@@ -81,18 +137,13 @@ nav {
   justify-content: space-evenly;
 }
 
-.player-symbol > button {
+.player-symbol > p {
   background-color: #ffffff;
   border: 1px solid #fff;
   border-radius: 10px;
   font-size: 2.5rem;
+  margin: 0;
   width: 3rem;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-}
-
-.player-symbol > button:hover {
-  filter: brightness(80%);
 }
 
 .player-turn {

@@ -8,13 +8,10 @@ const Gameboard = (function () {
   const getGameboard = () => gameboard;
   const checkGameboard = (gridNum, symbol) => {
     if (gameboard[gridNum] === "") {
-      fillGrid(gridNum, symbol);
+      gameboard[gridNum] = symbol;
     } else {
       console.log("This grid is taken! Please choose a different grid.");
     }
-  };
-  const fillGrid = (gridNum, symbol) => {
-    gameboard[gridNum] = symbol;
   };
   return { getGameboard, checkGameboard };
 })();
@@ -49,10 +46,8 @@ const Game = (function () {
     // for the first turn, the default should be playerOne who goes first.
     if (getSymbolCount("O") === getSymbolCount("X")) {
       return playerOne;
-    } else if (playerOne.getSymbol() === "O") {
+    } else {
       return getSymbolCount("O") > getSymbolCount("X") ? playerTwo : playerOne;
-    } else if (playerOne.getSymbol() === "X") {
-      return getSymbolCount("X") > getSymbolCount("O") ? playerTwo : playerOne;
     }
   };
 
@@ -122,8 +117,22 @@ const Game = (function () {
 const ControlDisplay = (function () {
   const playWithBuddyButton = document.querySelector(".buddy");
   const playWithComputerButton = document.querySelector(".computer");
+  const playerOneName = document
+    .querySelector(".one")
+    .querySelector(".player-name");
+  const playerTwoName = document
+    .querySelector(".two")
+    .querySelector(".player-name");
   const gameBoard = document.querySelector("#game-board");
   const gameBoardGrids = Array.from(gameBoard.querySelectorAll("div"));
+
+  // add event listener to play with buddy or computer buttons
+  playWithBuddyButton.addEventListener("click", function () {
+    playWithBuddyButton.classList.add("hidden");
+    playWithComputerButton.classList.add("hidden");
+  });
+
+  // after game start, players can no longer change their names
 
   let currentPlayer;
   // add event listener to each grid for player's grid selection
@@ -145,6 +154,8 @@ const ControlDisplay = (function () {
   });
 
   const renderGrid = function (gridNum) {
-    gameBoardGrids[gridNum].textContent = currentPlayer.getSymbol();
+    if (gameBoardGrids[gridNum].textContent === "") {
+      gameBoardGrids[gridNum].textContent = currentPlayer.getSymbol();
+    }
   };
 })();
