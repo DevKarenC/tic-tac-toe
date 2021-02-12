@@ -142,20 +142,33 @@ const ControlDisplay = (function () {
       currentPlayer = Game.getCurrentPlayer();
       currentPlayer.placeSymbol(gridNum, currentPlayer.getSymbol());
       renderGrid(gridNum);
-      Game.determineWinner(
-        Gameboard.getGameboard(),
-        Game.playerOne.getSymbol()
-      );
-      Game.determineWinner(
-        Gameboard.getGameboard(),
-        Game.playerTwo.getSymbol()
-      );
+      determineWinner();
+      disableGrid();
     });
   });
 
   const renderGrid = function (gridNum) {
     if (gameBoardGrids[gridNum].textContent === "") {
       gameBoardGrids[gridNum].textContent = currentPlayer.getSymbol();
+    }
+  };
+
+  const determineWinner = function () {
+    return (
+      Game.determineWinner(
+        Gameboard.getGameboard(),
+        Game.playerOne.getSymbol()
+      ) ||
+      Game.determineWinner(Gameboard.getGameboard(), Game.playerTwo.getSymbol())
+    );
+  };
+
+  // disable the board after a winner or tie
+  const disableGrid = function () {
+    if (determineWinner()) {
+      gameBoardGrids.forEach((grid) => {
+        grid.style.pointerEvents = "none";
+      });
     }
   };
 })();
