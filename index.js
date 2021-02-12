@@ -33,39 +33,51 @@ const Player = (name, symbol) => {
 
 // Game module created as an IIFE
 const Game = (function () {
+  const playerOne = Player("Player One", "O");
+  const playerTwo = Player("Player Two", "X");
   let gameStarted = false;
-  const playerOne = Player("Me", "O");
-  const playerTwo = Player("You", "X");
-  //   const createPlayerOne = () => {}
+  let playerTurn = playerOne;
   //   const startGame = () => {};
   const getSymbolCount = (symbol) => {
-    return Gameboard.getGameboard().reduce(function (acc, cur) {
-      if (cur === symbol) {
-        return acc + 1;
+    return Gameboard.getGameboard().reduce(function (totalCount, currentGrid) {
+      if (currentGrid === symbol) {
+        totalCount += 1;
       }
-      return acc;
+      return totalCount;
     }, 0);
   };
 
   const getCurrentPlayer = () => {
-    if (playerOne.getSymbol() === "O") {
+    // for the first turn, the default should be playerOne who goes first.
+    if (getSymbolCount("O") === getSymbolCount("X")) {
+      return playerOne;
+    } else if (playerOne.getSymbol() === "O") {
       return getSymbolCount("O") > getSymbolCount("X") ? playerTwo : playerOne;
-    } else {
+    } else if (playerOne.getSymbol() === "X") {
       return getSymbolCount("X") > getSymbolCount("O") ? playerTwo : playerOne;
     }
   };
-  const currentPlayerName = getCurrentPlayer().getName();
-  const currentPlayerSymbol = getCurrentPlayer().getSymbol();
+
+  // const switchTurns = () => {
+  //   // for the first turn, the default should be playerOne who goes first.
+  //   if (getSymbolCount("O") === 0 && getSymbolCount("X") === 0) {
+  //     return playerOne;
+  //   } else {
+  //     return getCurrentPlayer();
+  //   }
+  // };
 
   const determineWinner = (gameboard, symbol) => {
-    let winner = false;
+    let haveWinner = false;
+    let winningSymbol;
     const [b0, b1, b2, b3, b4, b5, b6, b7, b8] = [...gameboard];
     const numOfFilledGrid = gameboard.reduce(function (filledGrid, grid) {
-      if (grid === "O" || grid === "X") {
+      if (grid !== "") {
         filledGrid++;
       }
       return filledGrid;
     }, 0);
+
     // if there are not enough pieces on the board, skip the win check
     if (numOfFilledGrid < 5) {
       return;
@@ -76,9 +88,10 @@ const Game = (function () {
       (b3 === symbol && b4 === symbol && b5 === symbol) ||
       (b6 === symbol && b7 === symbol && b8 === symbol)
     ) {
-      winner = true;
-      console.log("We have a winner!");
-      return symbol;
+      haveWinner = true;
+      winningSymbol = symbol;
+      console.log(`We have a winner! ${winningSymbol} has won the game.`);
+      return winningSymbol;
     }
     // check columns
     else if (
@@ -86,21 +99,23 @@ const Game = (function () {
       (b1 === symbol && b4 === symbol && b7 === symbol) ||
       (b2 === symbol && b5 === symbol && b8 === symbol)
     ) {
-      winner = true;
-      console.log("We have a winner!");
-      return symbol;
+      haveWinner = true;
+      winningSymbol = symbol;
+      console.log(`We have a winner! ${winningSymbol} has won the game.`);
+      return winningSymbol;
     }
     // check diagonals
     else if (
       (b0 === symbol && b4 === symbol && b8 === symbol) ||
       (b2 === symbol && b4 === symbol && b6 === symbol)
     ) {
-      winner = true;
-      console.log("We have a winner!");
-      return symbol;
+      haveWinner = true;
+      winningSymbol = symbol;
+      console.log(`We have a winner! ${winningSymbol} has won the game.`);
+      return winningSymbol;
     }
     // if the board is full and there is no winner, it's a tie
-    else if (numOfFilledGrid === 9 && winner === false) {
+    else if (numOfFilledGrid === 9 && haveWinner === false) {
       console.log("It's a tie. Play again?");
       return;
     }
@@ -109,8 +124,8 @@ const Game = (function () {
   return {
     playerOne,
     playerTwo,
-    currentPlayerName,
-    currentPlayerSymbol,
+    getCurrentPlayer,
+    // switchTurns,
     determineWinner,
   };
 })();
@@ -122,20 +137,26 @@ const ControlDisplay = (function () {
   const gameBoard = document.querySelector("#game-board");
   const gameBoardGrids = Array.from(gameBoard.querySelectorAll("div"));
 
+  let currentPlayer;
   // add event listener to each grid for player's grid selection
   gameBoardGrids.forEach((grid) => {
     grid.addEventListener("click", function () {
       const gridNum = grid.dataset.gridNum;
-      Game.playerOne.placeSymbol(gridNum, Game.playerOne.getSymbol());
+      currentPlayer = Game.getCurrentPlayer();
+      currentPlayer.placeSymbol(gridNum, currentPlayer.getSymbol());
       renderGrid(gridNum);
       Game.determineWinner(
         Gameboard.getGameboard(),
         Game.playerOne.getSymbol()
       );
+      Game.determineWinner(
+        Gameboard.getGameboard(),
+        Game.playerTwo.getSymbol()
+      );
     });
   });
 
   const renderGrid = function (gridNum) {
-    gameBoardGrids[gridNum].textContent = Game.playerOne.getSymbol();
+    gameBoardGrids[gridNum].textContent = currentPlayer.getSymbol();
   };
 })();
