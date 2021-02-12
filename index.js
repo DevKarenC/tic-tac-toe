@@ -5,7 +5,6 @@
 // Gameboard module created as an IIFE since there should only be one gameboard
 const Gameboard = (function () {
   const gameboard = ["", "", "", "", "", "", "", "", ""];
-  //   const gameboard = ["O", "X", "O", "", "", "", "", "", ""];
   const getGameboard = () => gameboard;
   const checkGameboard = (gridNum, symbol) => {
     if (gameboard[gridNum] === "") {
@@ -35,9 +34,8 @@ const Player = (name, symbol) => {
 const Game = (function () {
   const playerOne = Player("Player One", "O");
   const playerTwo = Player("Player Two", "X");
-  let gameStarted = false;
-  let playerTurn = playerOne;
-  //   const startGame = () => {};
+  // let gameStarted = false;
+  // const startGame = () => {};
   const getSymbolCount = (symbol) => {
     return Gameboard.getGameboard().reduce(function (totalCount, currentGrid) {
       if (currentGrid === symbol) {
@@ -57,15 +55,6 @@ const Game = (function () {
       return getSymbolCount("X") > getSymbolCount("O") ? playerTwo : playerOne;
     }
   };
-
-  // const switchTurns = () => {
-  //   // for the first turn, the default should be playerOne who goes first.
-  //   if (getSymbolCount("O") === 0 && getSymbolCount("X") === 0) {
-  //     return playerOne;
-  //   } else {
-  //     return getCurrentPlayer();
-  //   }
-  // };
 
   const determineWinner = (gameboard, symbol) => {
     let haveWinner = false;
@@ -125,7 +114,6 @@ const Game = (function () {
     playerOne,
     playerTwo,
     getCurrentPlayer,
-    // switchTurns,
     determineWinner,
   };
 })();
