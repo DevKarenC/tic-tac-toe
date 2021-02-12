@@ -1,7 +1,8 @@
 // Goal: No global variables!
-//
+// Unsure of whether properties should be private or public?
+// Make them all private first, and if needed, change them to public.
 
-// Gameboard module created as an IIFE
+// Gameboard module created as an IIFE since there should only be one gameboard
 const Gameboard = (function () {
   const gameboard = ["", "", "", "", "", "", "", "", ""];
   //   const gameboard = ["O", "X", "O", "", "", "", "", "", ""];
@@ -19,21 +20,24 @@ const Gameboard = (function () {
   return { getGameboard, checkGameboard };
 })();
 
-// Player Factory Function
+// Player Factory Function since there can be multiple players in the game
 const Player = (name, symbol) => {
   const getName = () => name;
   const getSymbol = () => symbol;
+  // I can move the placeSymbol method into the player's prototype (since it's a shared method)
   const placeSymbol = (grid, symbol) => {
     Gameboard.checkGameboard(grid, symbol);
   };
   return { getName, getSymbol, placeSymbol };
 };
 
-const playerOne = Player("Me", "O");
-const playerTwo = Player("You", "X");
-
 // Game module created as an IIFE
 const Game = (function () {
+  let gameStarted = false;
+  const playerOne = Player("Me", "O");
+  const playerTwo = Player("You", "X");
+  //   const createPlayerOne = () => {}
+  //   const startGame = () => {};
   const getSymbolCount = (symbol) => {
     return Gameboard.getGameboard().reduce(function (acc, cur) {
       if (cur === symbol) {
@@ -53,7 +57,62 @@ const Game = (function () {
   const currentPlayerName = getCurrentPlayer().getName();
   const currentPlayerSymbol = getCurrentPlayer().getSymbol();
 
-  return { currentPlayerName, currentPlayerSymbol };
+  const determineWinner = (gameboard, symbol) => {
+    let winner = false;
+    const [b0, b1, b2, b3, b4, b5, b6, b7, b8] = [...gameboard];
+    const numOfFilledGrid = gameboard.reduce(function (filledGrid, grid) {
+      if (grid === "O" || grid === "X") {
+        filledGrid++;
+      }
+      return filledGrid;
+    }, 0);
+    // if there are not enough pieces on the board, skip the win check
+    if (numOfFilledGrid < 5) {
+      return;
+    }
+    // check rows
+    if (
+      (b0 === symbol && b1 === symbol && b2 === symbol) ||
+      (b3 === symbol && b4 === symbol && b5 === symbol) ||
+      (b6 === symbol && b7 === symbol && b8 === symbol)
+    ) {
+      winner = true;
+      console.log("We have a winner!");
+      return symbol;
+    }
+    // check columns
+    else if (
+      (b0 === symbol && b3 === symbol && b6 === symbol) ||
+      (b1 === symbol && b4 === symbol && b7 === symbol) ||
+      (b2 === symbol && b5 === symbol && b8 === symbol)
+    ) {
+      winner = true;
+      console.log("We have a winner!");
+      return symbol;
+    }
+    // check diagonals
+    else if (
+      (b0 === symbol && b4 === symbol && b8 === symbol) ||
+      (b2 === symbol && b4 === symbol && b6 === symbol)
+    ) {
+      winner = true;
+      console.log("We have a winner!");
+      return symbol;
+    }
+    // if the board is full and there is no winner, it's a tie
+    else if (numOfFilledGrid === 9 && winner === false) {
+      console.log("It's a tie. Play again?");
+      return;
+    }
+  };
+
+  return {
+    playerOne,
+    playerTwo,
+    currentPlayerName,
+    currentPlayerSymbol,
+    determineWinner,
+  };
 })();
 
 // ControlDisplay module created as an IIFE
@@ -67,12 +126,16 @@ const ControlDisplay = (function () {
   gameBoardGrids.forEach((grid) => {
     grid.addEventListener("click", function () {
       const gridNum = grid.dataset.gridNum;
-      playerOne.placeSymbol(gridNum, playerOne.getSymbol());
+      Game.playerOne.placeSymbol(gridNum, Game.playerOne.getSymbol());
       renderGrid(gridNum);
+      Game.determineWinner(
+        Gameboard.getGameboard(),
+        Game.playerOne.getSymbol()
+      );
     });
   });
 
   const renderGrid = function (gridNum) {
-    gameBoardGrids[gridNum].textContent = playerOne.getSymbol();
+    gameBoardGrids[gridNum].textContent = Game.playerOne.getSymbol();
   };
 })();
