@@ -31,8 +31,7 @@ const Player = (name, symbol) => {
 const Game = (function () {
   const playerOne = Player("Player One", "O");
   const playerTwo = Player("Player Two", "X");
-  // let gameStarted = false;
-  // const startGame = () => {};
+
   const getSymbolCount = (symbol) => {
     return Gameboard.getGameboard().reduce(function (totalCount, currentGrid) {
       if (currentGrid === symbol) {
@@ -55,15 +54,9 @@ const Game = (function () {
     let haveWinner = false;
     let winningSymbol;
     const [b0, b1, b2, b3, b4, b5, b6, b7, b8] = [...gameboard];
-    const numOfFilledGrid = gameboard.reduce(function (filledGrid, grid) {
-      if (grid !== "") {
-        filledGrid++;
-      }
-      return filledGrid;
-    }, 0);
 
     // if there are not enough pieces on the board, skip the win check
-    if (numOfFilledGrid < 5) {
+    if (getSymbolCount("O") + getSymbolCount("X") < 5) {
       return;
     }
     // check rows
@@ -99,7 +92,10 @@ const Game = (function () {
       return winningSymbol;
     }
     // if the board is full and there is no winner, it's a tie
-    else if (numOfFilledGrid === 9 && haveWinner === false) {
+    else if (
+      getSymbolCount("O") + getSymbolCount("X") === 9 &&
+      haveWinner === false
+    ) {
       console.log("It's a tie. Play again?");
       return;
     }
@@ -115,37 +111,59 @@ const Game = (function () {
 
 // ControlDisplay module created as an IIFE
 const ControlDisplay = (function () {
+  // caching DOM elements
+  const title = document.querySelector("h1");
   const playWithBuddyButton = document.querySelector(".buddy");
   const playWithComputerButton = document.querySelector(".computer");
-  const playerOneName = document
-    .querySelector(".one")
-    .querySelector(".player-name");
-  const playerTwoName = document
-    .querySelector(".two")
-    .querySelector(".player-name");
-  const gameBoard = document.querySelector("#game-board");
+  const startButton = document.querySelector(".start-button");
+  const playerBoxWrapper = document.querySelector(".player-box-wrapper");
+  const playerOneBox = document.querySelector(".one");
+  const playerTwoBox = document.querySelector(".two");
+  const playerOneName = playerOneBox.querySelector(".player-name");
+  const playerTwoName = playerTwoBox.querySelector(".player-name");
+  const gameBoard = document.querySelector(".game-board");
   const gameBoardGrids = Array.from(gameBoard.querySelectorAll("div"));
 
-  // add event listener to play with buddy or computer buttons
+  // player boxes appears after the player decided to play with buddy or computer
   playWithBuddyButton.addEventListener("click", function () {
+    title.style.transform = "translateY(0%)";
     playWithBuddyButton.classList.add("hidden");
     playWithComputerButton.classList.add("hidden");
+    playerBoxWrapper.classList.add("visible");
+    startButton.classList.add("visible");
   });
 
-  // after game start, players can no longer change their names
+  // display grid after the player clicks on the start button
+  startButton.addEventListener("click", function () {
+    startButton.classList.add("hidden");
+    gameBoard.classList.remove("hidden");
+    playerOneBox.classList.add("current-player");
+  });
 
-  let currentPlayer;
   // add event listener to each grid for player's grid selection
+  let currentPlayer;
   gameBoardGrids.forEach((grid) => {
     grid.addEventListener("click", function () {
       const gridNum = grid.dataset.gridNum;
       currentPlayer = Game.getCurrentPlayer();
       currentPlayer.placeSymbol(gridNum, currentPlayer.getSymbol());
       renderGrid(gridNum);
+      toggleBorder();
       determineWinner();
       disableGrid();
     });
   });
+
+  // add border around the next player box
+  function toggleBorder() {
+    if (currentPlayer.getSymbol() === "X") {
+      playerOneBox.classList.add("current-player");
+      playerTwoBox.classList.remove("current-player");
+    } else {
+      playerOneBox.classList.remove("current-player");
+      playerTwoBox.classList.add("current-player");
+    }
+  }
 
   const renderGrid = function (gridNum) {
     if (gameBoardGrids[gridNum].textContent === "") {

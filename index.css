@@ -1,5 +1,9 @@
 /* || General Styles */
 
+html {
+  overflow: auto;
+}
+
 body {
   background-color: #073b4c;
   font-family: "Quicksand", sans-serif;
@@ -13,16 +17,21 @@ header {
 
 h1 {
   font-family: "Molle", cursive;
-  font-size: 3rem;
+  font-size: 3.5rem;
   color: #ffffff;
   letter-spacing: 4px;
   text-align: center;
-  margin: 0;
+  margin: 3rem auto 0 auto;
+  transform: translateY(300%);
+  transition: transform 0.75s;
 }
 
 nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  margin: 2rem auto;
+  transform: translateY(40%);
 }
 
 .play-with-button,
@@ -32,29 +41,31 @@ nav {
   background-color: #ffd166;
   cursor: pointer;
   font-family: "Quicksand", sans-serif;
-  font-size: 1rem;
+  font-size: 1.25rem;
   font-weight: 600;
   letter-spacing: 1px;
   padding: 1rem;
   margin: 1rem;
-  width: 225px;
-  transition: all 0.4s ease-in;
+  width: 250px;
+  transition: all 0.1s ease-in;
 }
 
 .play-with-button:hover {
-  background-color: white;
+  background-color: #83c5be;
+  color: white;
 }
 
 .start-button {
   font-size: 1.25rem;
   letter-spacing: 2px;
   position: relative;
-  transition: ease-out 0.3s;
+  transform: scale(0);
+  transition: transform 0.75s;
   z-index: 1;
 }
 
 .start-button:before {
-  background-color: #ffffff;
+  background-color: #83c5be;
   content: "";
   position: absolute;
   top: 0;
@@ -74,36 +85,25 @@ nav {
   z-index: -1;
 }
 
-/* .visible {
-  transform: scale(1);
-}
-
-.hidden {
-  transform: scale(0);
-  display: none;
-} */
-
 /* || Player Boxes */
 
 .player-box-wrapper {
   display: flex;
   justify-content: center;
+  transition: transform 0.75s;
+  transform: scale(0);
 }
 
 .player-box {
   background: #ffd166;
-  border: 5px solid #ffd166;
+  border: 10px solid #ffd166;
   border-radius: 10px;
   font-size: 1.25rem;
   letter-spacing: 2px;
   width: 150px;
-  height: 125px;
+  height: 130px;
   padding: 1rem;
   margin: 1.5rem;
-}
-
-.player-box:first-child {
-  border: 5px solid #ef476f;
 }
 
 .player-box > label {
@@ -114,6 +114,10 @@ nav {
   margin: 0 auto;
   min-height: 30px;
   overflow-wrap: break-word;
+}
+
+.current-player {
+  border: 10px solid #ef476f;
 }
 
 #player-one-name,
@@ -146,7 +150,7 @@ input[type="text"] {
   width: 3rem;
 }
 
-.player-turn {
+.game-message {
   color: #ffffff;
   font-size: 1.5rem;
   font-weight: 600;
@@ -158,10 +162,10 @@ input[type="text"] {
 main {
   display: flex;
   justify-content: center;
-  margin: 4rem;
+  margin: 6rem auto;
 }
 
-#game-board {
+.game-board {
   display: grid;
   grid-template-columns: repeat(3, 150px);
   grid-template-rows: repeat(3, 150px);
@@ -189,4 +193,14 @@ main {
 
 .game-board-grid:nth-child(3n + 2) {
   border-right: 1px solid #ffffff;
+}
+
+/* || Toggle Visibility */
+
+.visible {
+  transform: scale(1);
+}
+
+.hidden {
+  display: none;
 }
