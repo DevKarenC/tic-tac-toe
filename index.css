@@ -31,11 +31,12 @@ nav {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  transform: translateY(40%);
+  transform: translateY(50%);
 }
 
 .play-with-button,
-.start-button {
+.start-button,
+.play-again-button {
   border: 0;
   border-radius: 10px;
   background-color: #ffd166;
@@ -43,7 +44,7 @@ nav {
   font-family: "Quicksand", sans-serif;
   font-size: 1.25rem;
   font-weight: 600;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   padding: 1rem;
   margin: 1rem;
   width: 250px;
@@ -55,7 +56,8 @@ nav {
   color: white;
 }
 
-.start-button {
+.start-button,
+.play-again-button {
   font-size: 1.25rem;
   letter-spacing: 2px;
   position: relative;
@@ -64,7 +66,8 @@ nav {
   z-index: 1;
 }
 
-.start-button:before {
+.start-button:before,
+.play-again-button:before {
   background-color: #83c5be;
   content: "";
   position: absolute;
@@ -76,7 +79,8 @@ nav {
   transition: 0.5s all ease;
 }
 
-.start-button:hover:before {
+.start-button:hover:before,
+.play-again-button:hover:before {
   border-radius: 10px;
   transition: 0.5s all ease;
   left: 0;
@@ -122,6 +126,7 @@ nav {
 
 #player-one-name,
 #player-two-name {
+  color: black;
   font-family: "Quicksand", sans-serif;
   font-size: 1.25rem;
   font-weight: 600;
@@ -162,7 +167,7 @@ input[type="text"] {
 main {
   display: flex;
   justify-content: center;
-  margin: 6rem auto;
+  margin: 2rem auto;
 }
 
 .game-board {
