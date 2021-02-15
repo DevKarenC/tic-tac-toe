@@ -1,33 +1,61 @@
 (function () {
+  const EMPTY = "";
+  const O_SYMBOL = "O";
+  const X_SYMBOL = "X";
   // Gameboard module created as an IIFE since there should only be one gameboard
   const Gameboard = (function () {
-    let gameboard = ["", "", "", "", "", "", "", "", ""];
+    /* gameboard is organized like this (number being the index of the array):
+    [ 0, 1, 2,
+      3, 4, 5,
+      6, 7, 8 ]
+    */
+    let gameboard = [
+      EMPTY,
+      EMPTY,
+      EMPTY,
+      EMPTY,
+      EMPTY,
+      EMPTY,
+      EMPTY,
+      EMPTY,
+      EMPTY,
+    ];
     const getGameboard = () => gameboard;
-    const checkGameboard = (gridNum, symbol) => {
-      if (gameboard[gridNum] === "") {
+    const addSymbolToGameboard = (gridNum, symbol) => {
+      if (gameboard[gridNum] === EMPTY) {
         gameboard[gridNum] = symbol;
       }
     };
     const resetGameboard = () => {
-      gameboard = ["", "", "", "", "", "", "", "", ""];
+      gameboard = [
+        EMPTY,
+        EMPTY,
+        EMPTY,
+        EMPTY,
+        EMPTY,
+        EMPTY,
+        EMPTY,
+        EMPTY,
+        EMPTY,
+      ];
     };
-    return { getGameboard, checkGameboard, resetGameboard };
+    return { getGameboard, addSymbolToGameboard, resetGameboard };
   })();
 
   // Player Factory Function since there can be multiple players in the game
   const Player = (name, symbol) => {
     const getName = () => name;
     const getSymbol = () => symbol;
-    const placeSymbol = (grid, symbol) => {
-      return Gameboard.checkGameboard(grid, symbol);
+    const placeSymbol = (gridNum) => {
+      return Gameboard.addSymbolToGameboard(gridNum, symbol);
     };
     return { getName, getSymbol, placeSymbol };
   };
 
   // Game module created as an IIFE
   const Game = (function () {
-    const playerOne = Player("Player One", "O");
-    const playerTwo = Player("Player Two", "X");
+    const playerOne = Player("Player One", O_SYMBOL);
+    const playerTwo = Player("Player Two", X_SYMBOL);
 
     const getSymbolCount = (symbol) => {
       return Gameboard.getGameboard().reduce(function (
@@ -44,22 +72,20 @@
 
     const getCurrentPlayer = () => {
       // for the first turn, the default should be playerOne who goes first.
-      if (getSymbolCount("O") === getSymbolCount("X")) {
+      if (getSymbolCount(O_SYMBOL) === getSymbolCount(X_SYMBOL)) {
         return playerOne;
       } else {
-        return getSymbolCount("O") > getSymbolCount("X")
+        return getSymbolCount(O_SYMBOL) > getSymbolCount(X_SYMBOL)
           ? playerTwo
           : playerOne;
       }
     };
 
     const determineWinner = (gameboard, symbol) => {
-      let haveWinner = false;
-      let winningSymbol;
       const [b0, b1, b2, b3, b4, b5, b6, b7, b8] = [...gameboard];
 
       // if there are not enough pieces on the board, skip the win check
-      if (getSymbolCount("O") + getSymbolCount("X") < 5) {
+      if (getSymbolCount(O_SYMBOL) + getSymbolCount(X_SYMBOL) < 5) {
         return;
       }
       // check rows
@@ -68,9 +94,7 @@
         (b3 === symbol && b4 === symbol && b5 === symbol) ||
         (b6 === symbol && b7 === symbol && b8 === symbol)
       ) {
-        haveWinner = true;
-        winningSymbol = symbol;
-        return winningSymbol;
+        return symbol;
       }
       // check columns
       else if (
@@ -78,25 +102,18 @@
         (b1 === symbol && b4 === symbol && b7 === symbol) ||
         (b2 === symbol && b5 === symbol && b8 === symbol)
       ) {
-        haveWinner = true;
-        winningSymbol = symbol;
-        return winningSymbol;
+        return symbol;
       }
       // check diagonals
       else if (
         (b0 === symbol && b4 === symbol && b8 === symbol) ||
         (b2 === symbol && b4 === symbol && b6 === symbol)
       ) {
-        haveWinner = true;
-        winningSymbol = symbol;
-        return winningSymbol;
+        return symbol;
       }
       // if the board is full and there is no winner, it's a tie
-      else if (
-        getSymbolCount("O") + getSymbolCount("X") === 9 &&
-        haveWinner === false
-      ) {
-        return haveWinner;
+      else if (getSymbolCount(O_SYMBOL) + getSymbolCount(X_SYMBOL) === 9) {
+        return false;
       }
     };
 
@@ -110,7 +127,7 @@
 
   // ControlDisplay module created as an IIFE
   const ControlDisplay = (function () {
-    /* Get the Elements */
+    /* BEGIN - Get the Elements */
     const title = document.querySelector("h1");
     const playWithBuddyButton = document.querySelector(".buddy");
     const startButton = document.querySelector(".start-button");
@@ -122,8 +139,9 @@
     const nav = document.querySelector("nav");
     const gameBoard = document.querySelector(".game-board");
     const gameBoardGrids = Array.from(gameBoard.querySelectorAll("div"));
+    /* END - Get the Elements */
 
-    /* Build out Functions */
+    /* BEGIN - Build out Functions */
 
     // callback function to handle play with buddy button
     function handlePlayWithBuddyButton() {
@@ -136,7 +154,7 @@
     // rendering player's choice on the grid DOM
     let checkSuccess = false;
     function renderGrid(gridNum) {
-      if (gameBoardGrids[gridNum].textContent === "") {
+      if (gameBoardGrids[gridNum].textContent === EMPTY) {
         gameBoardGrids[gridNum].textContent = currentPlayer.getSymbol();
         checkSuccess = true;
       } else {
@@ -147,7 +165,7 @@
     // add border around the next player box
     function toggleBorder() {
       if (checkSuccess) {
-        if (currentPlayer.getSymbol() === "X") {
+        if (currentPlayer.getSymbol() === X_SYMBOL) {
           playerOneBox.classList.add("current-player");
           playerTwoBox.classList.remove("current-player");
         } else {
@@ -186,7 +204,7 @@
         if (determineWinner() || determineWinner() === false) {
           displayGameOverMessage();
         } else {
-          if (currentPlayer.getSymbol() === "X") {
+          if (currentPlayer.getSymbol() === X_SYMBOL) {
             gameMessage.textContent = "Player 1's turn!";
           } else {
             gameMessage.textContent = "Player 2's turn!";
@@ -200,9 +218,9 @@
 
     // display message for the winner or a tie
     function displayGameOverMessage() {
-      if (determineWinner() === "O") {
+      if (determineWinner() === O_SYMBOL) {
         gameMessage.textContent = "Player 1 won! 🎉";
-      } else if (determineWinner() === "X") {
+      } else if (determineWinner() === X_SYMBOL) {
         gameMessage.textContent = "Player 2 won! 🎉";
       } else if (determineWinner() === false) {
         gameMessage.textContent = "It's a tie. Play again?";
@@ -224,13 +242,15 @@
       playerTwoBox.classList.remove("current-player");
       Gameboard.resetGameboard();
       gameBoardGrids.forEach((grid) => {
-        grid.textContent = "";
+        grid.textContent = EMPTY;
         grid.style.pointerEvents = "auto";
       });
       gameMessage.textContent = "Player 1's turn!";
     }
 
-    /* Attach Event Listeners */
+    /* END - Build out Functions */
+
+    /* BEGIN - Attach Event Listeners */
 
     // player boxes appears after the player clicks on the play with buddy button
     playWithBuddyButton.addEventListener("click", handlePlayWithBuddyButton);
@@ -253,7 +273,7 @@
       grid.addEventListener("click", function () {
         const gridNum = grid.dataset.gridNum;
         currentPlayer = Game.getCurrentPlayer();
-        currentPlayer.placeSymbol(gridNum, currentPlayer.getSymbol());
+        currentPlayer.placeSymbol(gridNum);
         renderGrid(gridNum);
         displayTurnMessage();
         toggleBorder();
@@ -263,5 +283,7 @@
     });
 
     playAgainButton.addEventListener("click", resetGame);
+
+    /* END - Attach Event Listeners */
   })();
 })();
